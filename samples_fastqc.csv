@@ -1,0 +1,4 @@
+# samples_fastq.csv should be of the following format
+sample1_read1.fastq,sample1_read2.fastq,sample1
+sample2_read1.fastq,sample2_read2.fastq,sample2
+sampleN_read1.fastq,sampleN_read2.fastq.sampleN
