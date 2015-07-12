@@ -92,8 +92,8 @@ foreach (@samples)
 		print $cuffcmd,"\n";			
 		system($cuffcmd);
         
-        # run cuffquant
-        my $cuffquant = "cuffquant -o ./cuffquant/$_->[2] -p 10 --frag-bias-correct /NGSshare/hg19_data/hg19.fa --multi-read-correct --library-type fr-firststrand $param{'GTF'} ../gsnap/".$_->[2]."_filter_sort.bam";
+        	# run cuffquant
+        	my $cuffquant = "cuffquant -o ./cuffquant/$_->[2] -p 10 --frag-bias-correct /NGSshare/hg19_data/hg19.fa --multi-read-correct --library-type fr-firststrand $param{'GTF'} ../gsnap/".$_->[2]."_filter_sort.bam";
 		print $cuffquant,"\n";
 		system($cuffquant);
 
@@ -104,7 +104,7 @@ foreach (@samples)
 
 $pm->wait_all_children;
 
-		#run cuffmerge
-		my $cuffmrg = "cuffmerge -g $param{'GTF'} -s $param{'GENOME'} -p 25 assembly_list.txt";
-        print $cuffmrg,"\n";
-        system($cuffmrg);
+#run cuffmerge
+my $cuffmrg = "cuffmerge -g $param{'GTF'} -s $param{'GENOME'} -p 25 assembly_list.txt";
+print $cuffmrg,"\n";
+system($cuffmrg);
