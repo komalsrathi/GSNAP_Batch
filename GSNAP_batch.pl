@@ -108,3 +108,5 @@ $pm->wait_all_children;
 my $cuffmrg = "cuffmerge -g $param{'GTF'} -s $param{'GENOME'} -p 25 assembly_list.txt";
 print $cuffmrg,"\n";
 system($cuffmrg);
+
+# from here on, either follow cufflinks_batch.pl or lincRNA discovery pipeline
