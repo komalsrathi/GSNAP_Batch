@@ -9,3 +9,4 @@ FASTQDIR=>fastq
 JOBS=>10
 BAMFILTER=>bamfilter.json
 RUNCUFFLINKS=>0
+FASTA=>hg19.fa
