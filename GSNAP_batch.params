@@ -10,3 +10,4 @@ JOBS=>10
 BAMFILTER=>bamfilter.json
 RUNCUFFLINKS=>0
 FASTA=>hg19.fa
+ASSEMBLY=>assembly_list.txt
