@@ -41,7 +41,10 @@ while(<FILE>){
 	push(@samples,\@r);
 }
 
-#run parallel jobs
+# start time
+my $start_run = time();
+
+# run parallel jobs
 my $pm=new Parallel::ForkManager($param{'JOBS'});
 
 foreach (@samples)
@@ -108,5 +111,10 @@ $pm->wait_all_children;
 my $cuffmrg = "cuffmerge -g $param{'GTF'} -s $param{'GENOME'} -p 25 assembly_list.txt";
 print $cuffmrg,"\n";
 system($cuffmrg);
+
+# end time
+my $end_run = time();
+my $run_time = $end_run - $start_run;
+print "Job took $run_time seconds\n";
 
 # from here on, either follow cufflinks_batch.pl or lincRNA discovery pipeline
