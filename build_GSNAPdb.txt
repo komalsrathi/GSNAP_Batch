@@ -1,0 +1,49 @@
+##download everything in mm10_data directory
+##get gtf files corresponding to protein-coding & lncRNAs from gencode annotation
+
+wget ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_mouse/release_M2/gencode.vM2.annotation.gtf.gz
+wget ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_mouse/release_M2/gencode.vM2.long_noncoding_RNAs.gtf.gz
+
+# In case of Ensembl
+# Ensembl uses 1 instead of chr1 for each chromsome. Filter out other contigs and then add the chr
+# zcat Homo_sapiens.GRCh37.72.gtf.gz | awk '/^MT|^X|^Y|^[1-9]/ { print "chr"$0}' | sed 's/chrMT/chrM/' > Homo_sapiens.GRCh37.72.gtf
+
+#remove lines starting with '#'
+zcat gencode.vM2.annotation.gtf.gz | sed '/^#/ d' > gencode.vM2.annotation.gtf
+zcat gencode.vM2.long_noncoding_RNAs.gtf.gz | sed '/^#/ d' > gencode.vM2.long_noncoding_RNAs.gtf
+
+#combine protein and long noncoding RNAs
+cat *.gtf > gencode.vM2.protein.long_noncoding_RNAs.gtf
+
+##get chromosome data from ucsc
+wget http://hgdownload.cse.ucsc.edu/goldenpath/mm10/bigZips/chromFa.tar.gz
+tar -xvzf chromFa.tar.gz
+rm *random*
+rm *Un*
+
+##make mm10 fasta file and index it
+cat *.fa > mm10.fa
+samtools faidx mm10.fa
+
+##get chromosome sizes
+wget https://raw.githubusercontent.com/broadinstitute/IGV/master/resources/chromSizes/mm10.chrom.sizes
+
+##build database from within mm10_data directory
+gmap_build -d mm10_gmap chr*.fa
+cp -r ./mm10_gmap/ ../../mm10_gmap/
+rm -r ./mm10_gmap/
+
+##make splice sites 
+cat gencode.vM2.protein.long_noncoding_RNAs.gtf | gtf_splicesites > gencode.vM2.protein.long_noncoding_RNAs.splicesites
+cat gencode.vM2.protein.long_noncoding_RNAs.splicesites | iit_store -o gencode.vM2.protein.long_noncoding_RNAs.splicesites
+
+#copy <splicesites>.iit to mm10_gmap/mm10_gmap.maps 
+cp gencode.vM2.protein.long_noncoding_RNAs.splicesites.iit /NGSshare/mm10_gmap/mm10_gmap.maps/
+
+# this step is only for human genome
+# SNP file (for hg19)
+wget ftp://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/snp137Common.txt.gz
+gunzip -c snp137.txt.gz | dbsnp_iit  > snp137Common.txt
+cat snp137Common.txt | iit_store -o snp137Common
+cp snp137Common.iit /path/to/gmapdb/hg19_gmap/hg19_gmap.maps
+snpindex -d hg19_gmap -v snp137Common.iit
