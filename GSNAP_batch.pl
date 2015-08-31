@@ -20,12 +20,14 @@ while(<PARAM>)
 $param{'ALNDIR'} = $param{'PROJECTNAME'}.'/gsnap';
 $param{'CUFFDIR'} = $param{'PROJECTNAME'}.'/cufflinks';
 $param{'COUNTDIR'} = $param{'PROJECTNAME'}.'/htseq_count';
+$param{'UMFASTQDIR'} = $param{'UMFASTQDIR'}.'/fastq_unmapped';
 
 #make directory with projectname and subdirectories gsnap, cufflinks and genecounts
 system("mkdir $param{'PROJECTNAME'}") unless (-d $param{'PROJECTNAME'});
 system("mkdir $param{'ALNDIR'}") unless (-d $param{'ALNDIR'});
 system("mkdir $param{'CUFFDIR'}") unless (-d $param{'CUFFDIR'});
 system("mkdir $param{'COUNTDIR'}") unless (-d $param{'COUNTDIR'});
+system("mkdir $param{'UMFASTQDIR'}") unless (-d $param{'UMFASTQDIR'});
 
 #open file with filename which is value of the key FASTALIST
 open FILE, $param{'FASTALIST'} or die 
