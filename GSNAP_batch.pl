@@ -62,6 +62,11 @@ foreach (@samples)
 		my $gsnapcmd = "gsnap -d $param{'GENOME'} --gunzip --batch=5 --nthreads=$param{'THREADS'} --distant-splice-penalty=10000 --clip-overlap -s $param{'SPLICEFILE'} -N 1 --npaths=100 -Q -v $param{'SNPFILE'} --read-group-id=$_->[2] --read-group-name=$_->[2] --read-group-library=$_->[2] --read-group-platform='Illumina' --format=sam $param{'FASTQDIR'}/$_->[0] $param{'FASTQDIR'}/$_->[1]  2> $param{'ALNDIR'}/$_->[2].out | samtools view -bS - > $param{'ALNDIR'}/$_->[2].bam";
 		print $gsnapcmd,"\n";		
 		system($gsnapcmd);
+		
+		# get unmapped reads and convert to fastq
+                # my $cmd= "samtools view -f 0x0004 -h $param{'ALNDIR'}/".$_->[2].".bam | java -jar /opt/picard/SamToFastq.jar INPUT=/dev/stdin FASTQ=$param{'UMFASTQDIR'}/".$_->[2]."_unmapped_R1.fastq SECOND_END_FASTQ=$param{'UMFASTQDIR'}/".$_->[2]."_unmapped_R2.fastq";
+                # print $cmd,"\n";
+                # system($cmd);
 
 		# Fix the bam file
 		# remove unmapped reads and secondary alignments
