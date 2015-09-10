@@ -35,6 +35,23 @@ system("mkdir $param{'CUFFQUANT'}") unless (-d $param{'CUFFQUANT'});
 system("mkdir $param{'CUFFNORM'}") unless (-d $param{'CUFFNORM'});
 system("mkdir $param{'CUFFDIFF'}") unless (-d $param{'CUFFDIFF'});
 
+#open file with filename which is value of the key FASTALIST
+open FILE, $param{'FASTALIST'} or die 
+
+#create an array samples
+my @samples;
+
+#splitting each line based on ',' and storing in an array @r
+#pushing the reference of this array in another array @samples
+while(<FILE>){
+	chomp;
+	my @r = split(',');
+	push(@samples,\@r);
+}
+
+#run parallel jobs
+my $pm=new Parallel::ForkManager($param{'JOBS'});
+
 # run cufflinks
 foreach (@samples)
 {
